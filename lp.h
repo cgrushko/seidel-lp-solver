@@ -37,7 +37,7 @@ extern "C" {
     void randperm(int i, int *p);
     void randomize(int n, int *perm);
     int linprog(FLOAT *v, int istart,int n, FLOAT *num, FLOAT *den,
-    int dim, FLOAT *opt, FLOAT *work, int *next, int *prev, int max_size);
+        int dim, FLOAT *opt, FLOAT *work, int *next, int *prev, int max_size);
     int lp_base_case(FLOAT halves[][2], int m, FLOAT n_vec[2],
         FLOAT d_vec[2], FLOAT opt[2], int *next, int *prev);
     int wedge(FLOAT halves[][2], int m, int *next, int *prev,

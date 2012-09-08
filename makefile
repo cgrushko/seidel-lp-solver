@@ -1,43 +1,24 @@
-# DOUBLE = -DDOUBLE 
-DOUBLE = 
-CFLAGS = -c -O $(DOUBLE)
-CFLAGS2 = -O $(DOUBLE)
+UNAME := $(shell uname)
 
-
-#
-# SGI
-#
-MACHINE = sgi
-CC = cc
-RANLIB = 
+# CHECK = -DCHECK
+CHECK = 
+DOUBLE = -DDOUBLE 
+# DOUBLE = 
+CFLAGS = -c -O3 $(DOUBLE) $(CHECK) -Wall -pedantic-errors -Werror -flto
+CFLAGS2 = -O3 $(DOUBLE) $(CHECK) -Wall -pedantic-errors -Werror -flto
 
 #
-# HP
-#
-#MACHINE = hp
-#CC = c89
-#RANLIB = 
+# Linux x86
+ifeq ($(UNAME), Linux)
+MACHINE = linux-x86
+endif
 
 #
-# SOL
-#
-#MACHINE = sol
-#CC = cc
-#RANLIB =
-
-#
-# SUN
-#
-#MACHINE = sun
-#CC = acc
-#RANLIB = ranlib Lib.sun.a
-
-#
-# IBM
-#
-#cc = c89 -c -O -I../ -D_XOPEN_SOURCE -DIBM
-#MACHINE = ibm
-#LIBS = -lgl -lm
+# OS-X
+ifeq ($(UNAME), Darwin)
+	CC = gcc
+	MACHINE = darwin
+endif
 
 # plane_down.c 
 DCS =  linprog.c \
@@ -56,10 +37,10 @@ DOS = linprog.o \
 	randomize.o \
 	unit2.o
 
-LIBA = Lib.$(MACHINE).a
+LIBA = libseidel_$(MACHINE).a
 
 $(LIBA):  $(DOS)
-	rm -f $(LIBA); ar q $(LIBA) $(DOS); $(RANLIB)
+	rm -f $(LIBA); ar rcs $(LIBA) $(DOS); $(RANLIB)
 
 llib-llinear.ln: $(DCS)
 	lint -Clinear $(DCS)
@@ -74,8 +55,6 @@ lp_base_case.o: lp_base_case.c lp.h
 	$(CC) $(CFLAGS)  lp_base_case.c 
 linprog.o: linprog.c lp.h localmath.h
 	$(CC) $(CFLAGS)  linprog.c 
-#plane_down.o: plane_down.c
-#	$(CC) $(CFLAGS)  plane_down.c
 vector_up.o: vector_up.c
 	$(CC) $(CFLAGS)  vector_up.c
 
@@ -90,9 +69,6 @@ randp: randp.c
 	$(CC) -g -o randp randp.c -lm
 findeps: findeps.c
 	$(CC) -o findeps findeps.c -lm
-
-plane_gen: plane_gen.c
-	$(CC) -g -o plane_gen plane_gen.c
 
 clean:
 	rm -f $(DOS) do_lp randp a.out

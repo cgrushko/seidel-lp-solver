@@ -12,10 +12,10 @@
 #include "localmath.h"
 
 int lp_no_constraints(int d,FLOAT n_vec[],FLOAT d_vec[],FLOAT opt[]);
-int move_to_front(int i,int next[],int prev[]);
+int move_to_front(int i,int next[],int prev[],int max_halves);
 
 /* unitize a d+1 dimensional point */
-lp_d_unit(int d, FLOAT a[], FLOAT b[]) {
+int lp_d_unit(int d, FLOAT a[], FLOAT b[]) {
 	int i;
 	FLOAT size;
 
@@ -62,9 +62,9 @@ void plane_down(FLOAT elim_eqn[], int ivar, int idim,
 
 
 #ifdef DOUBLE
-dlinprog
+int dlinprog
 #else
-slinprog
+int slinprog
 #endif
 (FLOAT halves[], /* halves  --- half spaces */
 	int istart,     /* istart  --- should be zero
@@ -108,7 +108,10 @@ slinprog
 */
 {
 	int status;
-	int i, j, k, imax;
+	int i, j, imax;
+	#ifdef CHECK
+	int k;
+	#endif
 	FLOAT *new_opt, *new_n_vec, *new_d_vec,  *new_halves, *new_work;
 	FLOAT *plane_i;
 	FLOAT val;
@@ -199,7 +202,7 @@ slinprog
 				    return(status);
 			    }
 /* place this offensive plane in second place */
-			    i = move_to_front(i,next,prev);
+			    i = move_to_front(i,next,prev,max_size);
 #ifdef CHECK
 			    j=0;
 			    while(1) {
@@ -221,14 +224,15 @@ slinprog
 	}
 }
 /* returns the index of the plane that is in i's place */
-move_to_front(int i,int next[],int prev[]) 
+int move_to_front(int i,int next[],int prev[],int max_halves) 
 {
 	int previ;
 	if(i==0 || i == next[0]) return i;
 	previ = prev[i];
-/* remove i from it's current position */
+/* remove i from its current position */
 	next[prev[i]] = next[i];
-	prev[next[i]] = prev[i];
+	if (next[i] != max_halves)
+		prev[next[i]] = prev[i];
 /* put i at the front */
 	next[i] = next[0];
 	prev[i] = 0;
@@ -237,7 +241,7 @@ move_to_front(int i,int next[],int prev[])
 	return(previ);
 }
 /* optimize the objective function when there are no contraints */
-lp_no_constraints(int d,FLOAT n_vec[],FLOAT d_vec[],FLOAT opt[])
+int lp_no_constraints(int d,FLOAT n_vec[],FLOAT d_vec[],FLOAT opt[])
 {
 	int i;
 	FLOAT n_dot_d, d_dot_d;

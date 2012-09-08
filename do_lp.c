@@ -2,20 +2,21 @@
 #define PROJECTIVE 1
 
 #include "lp.h"
-char *malloc();
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+int read_lp(FLOAT **halves, int *d, int *m, FLOAT **n_vec, FLOAT **d_vec, int *itype);
+int lp_d_unit(int d, FLOAT a[], FLOAT b[]);
 
-main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc,char *argv[])
 {
 	int *next, *prev;
 	FLOAT *halves, *n_vec, *opt, *d_vec;
 	int *perm, r;
 	int m, d, i, j, k;
-	int status, type;
-	FLOAT *work, val;
+	int status = AMBIGUOUS, type;
+	FLOAT *work;
 	int repeat;
 
 	if(argc>1) {
@@ -106,15 +107,14 @@ char *argv[];
 	} else {
 		(void)printf("parse error\n");
 	}
+	return 0;
 }
 #ifdef  DOUBLE
 #define	CONVERSION	"%lf"
 #else
 #define CONVERSION	"%f"
 #endif
-read_lp(halves,d,m,n_vec,d_vec,itype)
-FLOAT **halves, **n_vec, **d_vec;
-int *d, *m, *itype;
+int read_lp(FLOAT **halves, int *d, int *m, FLOAT **n_vec, FLOAT **d_vec, int *itype)
 {
 	int i, j;
 	char type[100];

@@ -13,7 +13,7 @@ Original documentation
 if you make "do_lp" and "randp" you can run the
 following test.
 
-randp 3 100 | do_lp
+./randp 3 100 | ./do_lp
 
 randp generates 100 random planes tangent to the hyperboloid
 in 3 dimensions centered at the origin with z as an axis of

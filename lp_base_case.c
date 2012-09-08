@@ -14,10 +14,10 @@
 #include "lp.h"
 
 int lp_no_constraints(int d,FLOAT n_vec[],FLOAT d_vec[],FLOAT opt[]);
-/*
+
 void lp_min_lin_rat(int degen, FLOAT cw_vec[2], 
 		FLOAT ccw_vec[2], FLOAT n_vec[2], FLOAT d_vec[2], FLOAT opt[2]);
-*/
+
 int move_to_front(int i,int next[],int prev[]);
 
 
@@ -38,7 +38,7 @@ unit2(FLOAT a[],FLOAT b[],FLOAT eps)
  * return the minimum on the projective line
  *
  */
-lp_base_case(FLOAT halves[][2], 	/* halves --- half lines */
+int lp_base_case(FLOAT halves[][2], 	/* halves --- half lines */
 	int m, 				/* m      --- terminal marker */
 	FLOAT n_vec[2],			/* n_vec  --- numerator funciton */
 	FLOAT d_vec[2],			/* d_vec  --- denominator function */
@@ -48,9 +48,11 @@ lp_base_case(FLOAT halves[][2], 	/* halves --- half lines */
 					double linked list of indices */
 {
 	FLOAT cw_vec[2], ccw_vec[2];
+#ifdef CHECK
 	FLOAT d_cw;
-	int i, degen;
-	int status;
+	int i;
+#endif
+	int status, degen;
 	FLOAT ab;
 
 /* find the feasible region of the line */
@@ -105,7 +107,7 @@ lp_base_case(FLOAT halves[][2], 	/* halves --- half lines */
 #endif
 	return(status);
 }
-lp_min_lin_rat(int degen,
+void lp_min_lin_rat(int degen,
 		FLOAT cw_vec[2],
 		FLOAT ccw_vec[2],
 		FLOAT n_vec[2],
@@ -183,7 +185,7 @@ lp_min_lin_rat(int degen,
 		}
 	}
 }
-wedge(FLOAT halves[][2],
+int wedge(FLOAT halves[][2],
 	int m,
 	int next[],
 	int prev[],

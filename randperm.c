@@ -8,7 +8,7 @@
  *       
  */
 int rand();
-randperm(int n,int perm[])
+void randperm(int n,int perm[])
 {
 	int i, j, t;
 
