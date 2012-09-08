@@ -1,4 +1,4 @@
-This is a C implementation of R. Seidel's algorithm for solving LPs
+This is Mike Hohmeyer's C implementation of R. Seidel's algorithm for solving LPs
 (linear programs.)
 
 Relevant paper:
