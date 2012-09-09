@@ -1,4 +1,6 @@
-UNAME := $(shell uname)
+uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
+uname_M := $(shell sh -c 'uname -m 2>/dev/null || echo not')
+UNAME = $(uname_S)_$(uname_M)
 
 # CHECK = -DCHECK
 CHECK = 
@@ -8,16 +10,9 @@ CFLAGS = -c -O3 $(DOUBLE) $(CHECK) -Wall -pedantic-errors -Werror -flto
 CFLAGS2 = -O3 $(DOUBLE) $(CHECK) -Wall -pedantic-errors -Werror -flto
 
 #
-# Linux x86
-ifeq ($(UNAME), Linux)
-MACHINE = linux-x86
-endif
-
-#
 # OS-X
-ifeq ($(UNAME), Darwin)
+ifeq ($(UNAME), Darwin_x86_64)
 	CC = gcc
-	MACHINE = darwin
 endif
 
 # plane_down.c 
@@ -37,7 +32,7 @@ DOS = linprog.o \
 	randomize.o \
 	unit2.o
 
-LIBA = libseidel_$(MACHINE).a
+LIBA = libseidel_$(UNAME).a
 
 $(LIBA):  $(DOS)
 	rm -f $(LIBA); ar rcs $(LIBA) $(DOS); $(RANLIB)
