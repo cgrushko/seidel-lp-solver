@@ -4,8 +4,11 @@ This is Mike Hohmeyer's C implementation of R. Seidel's algorithm for solving LP
 Relevant paper:
 Seidel, R. (1991), "Small-dimensional linear programming and convex hulls made easy", Discrete & Computational Geometry 6 (1): 423–434, doi:10.1007/BF02574699
 
-Downloaded from:
+Originally Downloaded from:
 http://www.cs.sunysb.edu/~algorith/implement/linprog/implement.shtml
+
+This version on GitHub:
+https://github.com/cgrushko/seidel-lp-solver
 
 Original documentation
 ======================
